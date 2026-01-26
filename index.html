@@ -31,7 +31,7 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             z-index: 10;
             width: 85%;
-            max-width: 350px;
+            max-width: 400px;
             text-align: center;
         }
 
@@ -42,7 +42,7 @@
             justify-content: center;
             gap: 20px;
             margin-top: 20px;
-            min-height: 300px; /* Space for buttons to move */
+            min-height: 300px;
         }
 
         #yesBtn {
@@ -53,8 +53,9 @@
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            z-index: 5; /* Lower than No button to prevent accidental clicks */
+            z-index: 5;
             transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         #noBtn {
@@ -66,12 +67,25 @@
             border-radius: 50px;
             cursor: pointer;
             position: relative;
-            z-index: 100; /* Always on top */
+            z-index: 100;
             transition: transform 0.1s ease;
         }
 
-        #celebration { display: none; }
+        #celebration { 
+            display: none; 
+        }
+
+        .celebration-gif {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 15px;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
         .heart-icon { font-size: 3rem; }
+        
+        h1 { color: var(--heart-red); font-size: 1.6rem; }
     </style>
 </head>
 <body>
@@ -88,8 +102,9 @@
 
         <div id="celebration">
             <span class="heart-icon">💖</span>
-            <h1>Yay! Best decision!</h1>
-            <p>I love you! 🥰</p>
+            <h1>Yay! I love you!</h1>
+            <img src="https://media.discordapp.net/attachments/1343809910995025951/1465270215544934602/gif_.gif?ex=69787eba&is=69772d3a&hm=d991587b07fa6a517e5fd32287da86a19ed77d78341a2c6850abf7173f818513&=&width=433&height=770" alt="Valentine Celebration" class="celebration-gif">
+            <p>Best decision ever! 🥰</p>
         </div>
     </div>
 
@@ -97,7 +112,7 @@
         let yesSize = 1.2;
 
         function handleTouch(e) {
-            e.preventDefault(); // Prevents the actual "click" from happening
+            e.preventDefault(); 
             moveButton();
         }
 
@@ -107,7 +122,7 @@
 
             noBtn.style.position = 'fixed';
             
-            // Calculate random position away from the center
+            // Random position away from the center
             const padding = 80;
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding) + (padding/2);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding) + (padding/2);
@@ -115,8 +130,8 @@
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
 
-            // Increase Yes button size
-            yesSize += 0.3;
+            // Increase Yes button size significantly
+            yesSize += 0.4;
             yesBtn.style.fontSize = yesSize + 'rem';
             yesBtn.style.padding = (yesSize * 10) + 'px ' + (yesSize * 30) + 'px';
         }
@@ -124,6 +139,7 @@
         function celebrate() {
             document.getElementById('question-section').style.display = 'none';
             document.getElementById('celebration').style.display = 'block';
+            document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3)";
         }
     </script>
 </body>
