@@ -20,18 +20,8 @@
             min-height: 100vh;
             background: linear-gradient(135deg, var(--primary-pink), var(--deep-pink));
             font-family: 'Arial', sans-serif;
-            overflow: hidden; /* Prevents scrollbars when button moves */
+            overflow: hidden;
             touch-action: manipulation;
-        }
-
-        #balloon-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
         }
 
         .container {
@@ -41,23 +31,18 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             z-index: 10;
             width: 85%;
-            max-width: 400px;
-            position: relative;
-        }
-
-        h1 {
-            color: var(--heart-red);
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
+            max-width: 350px;
+            text-align: center;
         }
 
         .buttons {
             display: flex;
-            flex-direction: column; /* Stacked for mobile accessibility */
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            min-height: 200px;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            min-height: 300px; /* Space for buttons to move */
         }
 
         #yesBtn {
@@ -68,9 +53,8 @@
             font-size: 1.2rem;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 20;
-            width: auto;
+            z-index: 5; /* Lower than No button to prevent accidental clicks */
+            transition: all 0.2s ease;
         }
 
         #noBtn {
@@ -82,51 +66,29 @@
             border-radius: 50px;
             cursor: pointer;
             position: relative;
-            z-index: 15;
-            transition: all 0.2s ease;
+            z-index: 100; /* Always on top */
+            transition: transform 0.1s ease;
         }
 
-        /* Floating Balloon Animation */
-        .balloon {
-            position: absolute;
-            bottom: -100px;
-            animation: float up 7s infinite linear;
-            opacity: 0.8;
-        }
-
-        @keyframes up {
-            0% { transform: translateY(0) rotate(0deg); }
-            100% { transform: translateY(-120vh) rotate(20deg); }
-        }
-
-        #celebration {
-            display: none;
-        }
-
-        .heart-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            display: block;
-        }
+        #celebration { display: none; }
+        .heart-icon { font-size: 3rem; }
     </style>
 </head>
 <body>
 
-    <div id="balloon-container"></div>
-
-    <div class="container" id="main-card">
+    <div class="container">
         <div id="question-section">
             <span class="heart-icon">💝</span>
             <h1>Will you be my Valentine?</h1>
             <div class="buttons">
                 <button id="yesBtn" onclick="celebrate()">Yes</button>
-                <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+                <button id="noBtn" onmouseover="moveButton()" ontouchstart="handleTouch(event)">No</button>
             </div>
         </div>
 
         <div id="celebration">
             <span class="heart-icon">💖</span>
-            <h1>I Knew You'd Say Yes!</h1>
+            <h1>Yay! Best decision!</h1>
             <p>I love you! 🥰</p>
         </div>
     </div>
@@ -134,38 +96,27 @@
     <script>
         let yesSize = 1.2;
 
-        function createBalloons() {
-            const container = document.getElementById('balloon-container');
-            const emojis = ['🎈', '❤️', '🌸', '✨'];
-            for (let i = 0; i < 15; i++) {
-                const b = document.createElement('div');
-                b.className = 'balloon';
-                b.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                b.style.left = Math.random() * 100 + 'vw';
-                b.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                b.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(b);
-            }
+        function handleTouch(e) {
+            e.preventDefault(); // Prevents the actual "click" from happening
+            moveButton();
         }
 
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
 
-            // Move the "No" button
-            // We use fixed positioning so it doesn't push other elements
             noBtn.style.position = 'fixed';
             
-            // Calculate safe boundaries (80% of screen to avoid corners)
-            const padding = 50;
+            // Calculate random position away from the center
+            const padding = 80;
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding) + (padding/2);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding) + (padding/2);
             
             noBtn.style.left = x + 'px';
             noBtn.style.top = y + 'px';
 
-            // Increase "Yes" button size
-            yesSize += 0.4;
+            // Increase Yes button size
+            yesSize += 0.3;
             yesBtn.style.fontSize = yesSize + 'rem';
             yesBtn.style.padding = (yesSize * 10) + 'px ' + (yesSize * 30) + 'px';
         }
@@ -173,15 +124,7 @@
         function celebrate() {
             document.getElementById('question-section').style.display = 'none';
             document.getElementById('celebration').style.display = 'block';
-            document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3)";
-            
-            // Burst of extra balloons
-            for(let i=0; i<3; i++) {
-                setTimeout(createBalloons, i * 500);
-            }
         }
-
-        window.onload = createBalloons;
     </script>
 </body>
 </html>
